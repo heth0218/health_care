@@ -180,5 +180,23 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+//Check the user in db
+router.post('/findUser', async (req, res) => {
+    try {
+        const { contact } = req.body;
+        const user = await User.find({ contact });
+        if (!user) {
+            res.status(404).send({ msg: 'User Not found', found: false })
+        }
+        res.status(200).send({ msg: 'User found', found: true, user })
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: 'Server Error'
+        })
+    }
+})
+
 
 module.exports = router;
