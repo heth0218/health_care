@@ -11,7 +11,7 @@ const Prescription = require('../models/Prescription')
 
 //Register a User
 
-router.post('/register', [
+router.post('/registers', [
     check('name', 'Please enter a name').not().isEmpty(),
     check('email', 'Enter a valid email address').isEmail()
 ], async (req, res) => {
