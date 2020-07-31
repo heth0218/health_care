@@ -10,7 +10,7 @@ app.use(express.json({ extended: false }));
 const PORT = process.env.PORT || 5000;
 
 app.get('/',async(req,res)=>{
-res.send("hello");
+res.send("hello there");
 })
 
 app.use('/api/user', require('./routes/users'));
