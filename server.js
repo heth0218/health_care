@@ -9,6 +9,10 @@ app.use(express.json({ extended: false }));
 
 const PORT = process.env.PORT || 5000;
 
+app.get('/',async(req,res)=>{
+res.send("hello");
+})
+
 app.use('/api/user', require('./routes/users'));
 app.use('/api/doctor', require('./routes/doctor'));
 app.use('/api/report', require('./routes/report'));
