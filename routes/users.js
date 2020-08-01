@@ -79,21 +79,21 @@ router.post('/userReports', auth, async (req, res) => {
 router.post('/qrauth', async (req, res) => {
 
     try {
-        const { doctor, user } = req.body;
-        const users = await User.findById(user);
+        const { doctor, contact } = req.body;
+        const users = await User.findOne({ contact });
         if (!users) {
-            res.status(404).send({
+            return res.status(404).send({
                 msg: 'User not found in the db...'
             })
         }
         await User.findByIdAndUpdate(
-            user,
+            users._id,
             { $set: { currentDoctor: doctor } },
             { new: true })
-        const updatedUser = await User.findById(user)
+        const updatedUser = await User.findById(users._id)
         const doctors = await Doctor.findById(doctor);
         if (!doctors) {
-            res.status(404).send({
+            return res.status(404).send({
                 msg: 'Doctor not found in the db... '
             })
         }
@@ -101,8 +101,7 @@ router.post('/qrauth', async (req, res) => {
         res.status(200).send({ updatedUser })
 
     } catch (error) {
-
-        console.log(error.message);
+        console.log("hello", error.message);
         res.status(500).send('Server Error')
     }
 })
