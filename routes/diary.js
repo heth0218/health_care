@@ -18,21 +18,42 @@ router.post('/', async (req, res) => {
 })
 
 //DATE WISE BRING DATA
-router.post('/:id', async (req, res) => {
+router.post('/sendData', async (req, res) => {
     try {
-        const { startDate, endDate } = req.body
+        const { startDate, endDate, userId } = req.body
 
+        const doctor = await Doctor.findOne({ name: "Rushank Shah" });
+        await Doctor.findByIdAndUpdate(
+            doctor._id,
+            { $set: { clientData: req.body } },
+            { new: true })
+
+        const updatedDoctor = await Doctor.findOne({ name: "Rushank Shah" })
+        console.log(updatedDoctor)
+        res.status(200).send(updatedDoctor)
+
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+//RENDER CLIENT DETAIL LIST ON DOCTORS PAGE
+
+router.get('/clientDetail', async (req, res) => {
+
+    try {
+        const doctor = await Doctor.findOne({ name: 'Rushank Shah' });
+
+        const { startDate, endDate, userId } = doctor.clientData;
         const diaries = await Diary.find({
-            user: req.params.id,
+            user: userId,
             date: {
-                $gte: new Date(`${startDate}`),//"2020-07-05"
-                $lte: new Date(`${endDate}`)//"2020-07-31"
+                $gte: new Date(startDate),//"2020-07-05"
+                $lte: new Date(endDate)//"2020-07-31"
             }
         })
-        console.log("diaries", diaries)
-
-        res.status(200).send(diaries);
-
+        console.log(diaries);
+        res.status(200).send(diaries)
     } catch (error) {
         res.status(500).send(error)
     }
