@@ -5,6 +5,11 @@ const User = require('../models/User');
 const Doctor = require('../models/Doctor')
 
 
+const accountSid = 'ACd9c13445898ed1dd3eab89f9d4fb99ac';
+const authToken = '3d38700c9f75f060cadc5b075f5da980';
+const client = require('twilio')(accountSid, authToken);
+
+
 //ONCLICK OF OPEN DIARY IN PHONE SEND THE CONTACT
 router.get('/:contact', async (req, res) => {
     try {
@@ -56,12 +61,34 @@ router.post('/close', async (req, res) => {
     }
 
 })
+async function sms({ name, compound }) {
+
+    const message = await client.messages.create({
+        to: '+919820145991',
+        from: '+12057758148',
+        body: `${name} is having our calibrated emotion score of ${compound}. It shall be nice of you to have a chat with him today.Have a nice Day!!`,
+        // mediaUrl: 'https://climacons.herokuapp.com/clear.png',
+    });
+    return message;
+};
+
 
 //POST diary daily text scores summary and entity list
 router.post('/', async (req, res) => {
     try {
         const { text, user, scores, Summary, ent_list } = req.body
         const diary = new Diary({ text, user, scores, Summary, ent_list })
+        const users = await User.findById(user);
+        const name = users.name
+        const compound = scores.compound
+        if (scores.compound < -0.85) {
+            sms({ name, compound })
+                .then(() => {
+                    console.log("SMS sent!");
+                });
+
+        }
+
         await diary.save()
         console.log(diary);
         res.status(201).send(diary);
