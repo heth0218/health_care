@@ -149,7 +149,6 @@ router.get('/userDetails', auth, async (req, res) => {
 
 })
 
-
 //Doctor writing prescription for the patient and saving it inside that patients db
 router.post('/prescription', auth, async (req, res) => {
 
@@ -157,7 +156,8 @@ router.post('/prescription', auth, async (req, res) => {
         const { prescription, userId } = req.body;
 
         const prescriptions = new Prescription({
-            details: prescription,
+            title: prescription.title,
+            details: prescription.details,
             patient: userId,
             doctor: req.decoded.user.id
         })
@@ -171,5 +171,29 @@ router.post('/prescription', auth, async (req, res) => {
         })
     }
 })
+
+
+//PHARMACY TO GET THE PRESCRIPTION USING CONTACT NUMBER
+router.get('/:contact', async (req, res) => {
+    try {
+        const user = await User.findOne({ contact: req.params.contact });
+        if (!user) {
+            return res.status(404).send({ msg: 'User not found' })
+        }
+        const prescription = await Prescription.find({ patient: user._id });
+        if (!prescription) {
+            return res.status(404).send({ msg: "No prescriptions found" });
+        }
+
+        res.status(200).send(prescription);
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: 'Server Error'
+        })
+    }
+})
+
 
 module.exports = router
