@@ -149,6 +149,7 @@ router.get('/userDetails', auth, async (req, res) => {
 
 })
 
+
 //Doctor writing prescription for the patient and saving it inside that patients db
 router.post('/prescription', auth, async (req, res) => {
 
@@ -156,10 +157,9 @@ router.post('/prescription', auth, async (req, res) => {
         const { prescription, userId } = req.body;
 
         const prescriptions = new Prescription({
-            cause: prescription.cause,
-            details: prescription.details,
+            details: prescription,
             patient: userId,
-            doctor: req.user
+            doctor: req.decoded.user.id
         })
         await prescriptions.save();
 
@@ -171,6 +171,5 @@ router.post('/prescription', auth, async (req, res) => {
         })
     }
 })
-
 
 module.exports = router
