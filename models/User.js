@@ -16,10 +16,7 @@ const UserSchema = mongoose.Schema({
         unique: true
     },
     contact: String,
-    emergencyContact: [{
-        name: String,
-        contact: String
-    }],
+    emergencyContact: [String],
     doctors: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: Doctor
