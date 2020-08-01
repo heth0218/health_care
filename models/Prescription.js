@@ -7,7 +7,7 @@ const PrescriptionSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: Doctor
     },
-    cause: String,
+    title: String,
     details: String,
     patient: {
         type: mongoose.Schema.Types.ObjectId,
