@@ -59,12 +59,13 @@ router.post('/register', [
 //User adding its own details(eg.reports)
 
 router.post('/userReports', async (req, res) => {
-    const { title, file, user } = req.body;
+    const { title, file, contact } = req.body;
     const report = {
         title, file
     }
     try {
-        report.patient = user;
+        const user = await User.findOne({ contact })
+        report.patient = user._id;
         const reports = await Report(report).save();
         console.log(reports)
         res.status(200).send(reports)
@@ -151,17 +152,18 @@ router.post('/login', [
 
 //For User to view his/her own detail
 
-router.get('/:id', async (req, res) => {
+router.get('/:number', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({ contact: req.params.number });
+        console.log(user)
         if (!user) {
             return res.status(404).send({
                 msg: 'User not found in the db ....'
             })
         }
-        const userReports = await Report.find({ patient: req.params.id });
+        const userReports = await Report.find({ patient: user._id });
 
-        const userPrescriptions = await Prescription.find({ patient: req.params.id }).populate('doctor');
+        const userPrescriptions = await Prescription.find({ patient: user._id }).populate('doctor');
 
         if (!userReports && !userPrescriptions) {
             return res.status(400).send({
@@ -169,7 +171,7 @@ router.get('/:id', async (req, res) => {
             })
         }
 
-        res.status(201).send({ userPrescriptions, userReports,user });
+        res.status(201).send({ userPrescriptions, userReports, user });
 
     } catch (error) {
         console.log(error.message);
