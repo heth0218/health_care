@@ -197,5 +197,36 @@ router.post('/findUser', async (req, res) => {
     }
 })
 
+//Remove current doctor 
+//after doc is done diagnosing the doctor can remove the users data
+//onclick of remove user data
+
+router.post('/removeCurrentDoctor', async (req, res) => {
+
+    try {
+        const { userId, doctorId } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).send({ msg: 'User not found...' });
+        }
+
+        await User.findByIdAndUpdate(
+            userId,
+            { $set: { currentDoctor: null } },
+            { new: true })
+
+        const updatedUser = await User.findById(userId);
+        res.status(200).send(updatedUser)
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: 'Server Error'
+        })
+    }
+
+})
+
 
 module.exports = router;
