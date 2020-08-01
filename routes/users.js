@@ -183,7 +183,7 @@ router.get('/:id', async (req, res) => {
 router.post('/findUser', async (req, res) => {
     try {
         const { contact } = req.body;
-        const user = await User.find({ contact });
+        const user = await User.findOne({ contact });
         if (!user) {
             res.status(404).send({ msg: 'User Not found', found: false })
         }
