@@ -74,24 +74,23 @@ router.post('/userReports', auth, async (req, res) => {
     }
 })
 
-
 //Authenticating the user after the QR SCAN
 router.post('/qrauth', async (req, res) => {
 
     try {
-        const { doctor, contact } = req.body;
+        const { doctorEmail, contact } = req.body;
         const users = await User.findOne({ contact });
         if (!users) {
             return res.status(404).send({
                 msg: 'User not found in the db...'
             })
         }
+        const doctors = await Doctor.findOne({ email: doctorEmail });
         await User.findByIdAndUpdate(
             users._id,
-            { $set: { currentDoctor: doctor } },
+            { $set: { currentDoctor: doctors._id } },
             { new: true })
         const updatedUser = await User.findById(users._id)
-        const doctors = await Doctor.findById(doctor);
         if (!doctors) {
             return res.status(404).send({
                 msg: 'Doctor not found in the db... '
@@ -104,7 +103,7 @@ router.post('/qrauth', async (req, res) => {
         console.log("hello", error.message);
         res.status(500).send('Server Error')
     }
-})
+}
 
 //Login the user
 router.post('/login', [
