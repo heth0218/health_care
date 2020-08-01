@@ -11,7 +11,7 @@ const Prescription = require('../models/Prescription')
 
 //Register a User
 
-router.post('/registers', [
+router.post('/register', [
     check('name', 'Please enter a name').not().isEmpty(),
     check('email', 'Enter a valid email address').isEmail()
 ], async (req, res) => {
@@ -58,13 +58,13 @@ router.post('/registers', [
 
 //User adding its own details(eg.reports)
 
-router.post('/userReports', auth, async (req, res) => {
-    const { title, file } = req.body;
+router.post('/userReports', async (req, res) => {
+    const { title, file, user } = req.body;
     const report = {
         title, file
     }
     try {
-        report.patient = res.locals.user._id;
+        report.patient = user;
         const reports = await Report(report).save();
         console.log(reports)
         res.status(200).send(reports)
@@ -73,6 +73,7 @@ router.post('/userReports', auth, async (req, res) => {
         res.status(500).send('Server Error')
     }
 })
+
 
 //Authenticating the user after the QR SCAN
 router.post('/qrauth', async (req, res) => {
@@ -103,7 +104,7 @@ router.post('/qrauth', async (req, res) => {
         console.log("hello", error.message);
         res.status(500).send('Server Error')
     }
-}
+})
 
 //Login the user
 router.post('/login', [
