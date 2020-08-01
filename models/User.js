@@ -29,7 +29,11 @@ const UserSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    roles: [String]
+    roles: [String],
+    diary: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports = mongoose.model('user', UserSchema)
