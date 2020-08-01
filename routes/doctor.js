@@ -129,9 +129,11 @@ router.get('/userDetails', auth, async (req, res) => {
             })
         }
 
-        const user = await User.find({ currentDoctor: req.decoded.user.id });
+        const user = await User.findOne({ currentDoctor: req.decoded.user.id });
+        console.log(user)
 
         const report = await Report.find({ patient: user._id });
+        console.log(report)
         if (!report || !user) {
             res.status(404).send({
                 msg: 'Not found 404...'
