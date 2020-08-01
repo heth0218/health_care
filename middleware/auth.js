@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User');
+const Doctor = require('../models/Doctor');
 
 
 module.exports = async (req, res, next) => {
@@ -16,6 +17,7 @@ module.exports = async (req, res, next) => {
 
     const decoded = jwt.verify(token, config.get('jwtSecret'))
     const user = await User.findById(decoded.user.id)
+    req.decoded = decoded
     res.locals.user = user
     next();
 
