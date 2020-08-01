@@ -121,21 +121,23 @@ router.post('/login', [
 router.get('/userDetails', auth, async (req, res) => {
 
     try {
-        const doctor = await Doctor.findById(req.user);
+        console.log(req.decoded.user.id)
+        const doctor = await Doctor.findById(req.decoded.user.id);
         if (!doctor) {
             res.status(500).send({
                 msg: 'Unauthorised to this facility'
             })
         }
 
-        const user = await User.find({ currentDoctor: req.user });
-        const report = await Report.find({ title: "Heart ECG" });
+        const user = await User.find({ currentDoctor: req.decoded.user.id });
+
+        const report = await Report.find({ patient: user._id });
         if (!report || !user) {
             res.status(404).send({
                 msg: 'Not found 404...'
             })
         }
-        res.status(200).send({ report, userId: user._id })
+        res.status(200).send({ report, userId: user._id, user })
     } catch (error) {
         console.log(error.message);
         res.status(500).json({
