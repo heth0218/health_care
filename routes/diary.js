@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Diary = require('../models/Diary');
 const User = require('../models/User');
-
+const Doctor = require('../models/Doctor')
 
 //POST diary daily text scores summary and entity list
 router.post('/', async (req, res) => {
