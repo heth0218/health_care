@@ -9,6 +9,11 @@ const DoctorSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    clientData: {
+        startDate: String,
+        endDate: String,
+        userId: String
+    },
     roles: [String]
 });
 
