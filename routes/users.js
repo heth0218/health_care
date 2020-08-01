@@ -169,7 +169,7 @@ router.get('/:id', async (req, res) => {
             })
         }
 
-        res.status(201).send({ userPrescriptions, userReports });
+        res.status(201).send({ userPrescriptions, userReports,user });
 
     } catch (error) {
         console.log(error.message);
