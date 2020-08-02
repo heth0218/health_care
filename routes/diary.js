@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
         const compound = scores.compound
         const negative = parseFloat(scores.neg) * 100
         console.log(negative)
-        if (compound < -0.85) {
+        if (compound < -0.70) {
             sms({ name, negative })
                 .then(() => {
                     console.log("SMS sent!");
