@@ -4,9 +4,8 @@ const Diary = require('../models/Diary');
 const User = require('../models/User');
 const Doctor = require('../models/Doctor')
 
-
 const accountSid = 'ACd9c13445898ed1dd3eab89f9d4fb99ac';
-const authToken = '3d38700c9f75f060cadc5b075f5da980';
+const authToken = '1d61c5297575d818f055f6242562855d';
 const client = require('twilio')(accountSid, authToken);
 
 
@@ -61,17 +60,16 @@ router.post('/close', async (req, res) => {
     }
 
 })
-async function sms({ name, compound }) {
+async function sms({ name, negative }) {
 
     const message = await client.messages.create({
         to: '+919820145991',
         from: '+12057758148',
-        body: `${name} is having our calibrated emotion score of ${compound}. It shall be nice of you to have a chat with him today.Have a nice Day!!`,
+        body: `Hello, ${name} is having a little dull day as we figure out calculating ${negative}% of negative score.Make ${name}'s day a little better and hope you have one too!`,
         // mediaUrl: 'https://climacons.herokuapp.com/clear.png',
     });
     return message;
 };
-
 
 //POST diary daily text scores summary and entity list
 router.post('/', async (req, res) => {
@@ -81,14 +79,15 @@ router.post('/', async (req, res) => {
         const users = await User.findById(user);
         const name = users.name
         const compound = scores.compound
-        if (scores.compound < -0.85) {
-            sms({ name, compound })
+        const negative = parseFloat(scores.neg) * 100
+        console.log(negative)
+        if (compound < -0.85) {
+            sms({ name, negative })
                 .then(() => {
                     console.log("SMS sent!");
-                });
+                })
 
         }
-
         await diary.save()
         console.log(diary);
         res.status(201).send(diary);
@@ -96,7 +95,6 @@ router.post('/', async (req, res) => {
         res.status(500).send(error)
     }
 })
-
 //DATE WISE BRING DATA
 router.post('/sendData', async (req, res) => {
     try {
