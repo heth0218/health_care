@@ -172,8 +172,11 @@ router.get('/:number', async (req, res) => {
         }
 
         const noOfReports = userReports.length
+        const noOfPrescriptions = userPrescriptions.length
 
-        res.status(201).send({ userPrescriptions, userReports, user, noOfReports });
+
+
+        res.status(201).send({ userPrescriptions, userReports, user, noOfReports, noOfPrescriptions });
 
     } catch (error) {
         console.log(error.message);
