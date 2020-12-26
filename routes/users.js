@@ -22,7 +22,7 @@ router.post('/register', [
         })
     }
 
-    const { name, age, email, contact, emergencyContact } = req.body;
+    const { name, age, email, contact, password, emergencyContact } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -33,7 +33,7 @@ router.post('/register', [
             })
         }
 
-        user = new User({ name, age, email, contact, emergencyContact });
+        user = new User({ name, age, email, contact, emergencyContact, password });
 
         await user.save();
 
@@ -117,7 +117,7 @@ router.post('/login', [
             errors: errors.array()
         })
     }
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -127,6 +127,13 @@ router.post('/login', [
                 msg: 'User npot found'
             })
         }
+
+        if (password !== user.password) {
+            return res.status(500).send({
+                msg: "Invalid password"
+            })
+        }
+
         const payload = {
             user: {
                 id: user.id
