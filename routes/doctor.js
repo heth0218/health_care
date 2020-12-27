@@ -195,5 +195,27 @@ router.get('/:contact', async (req, res) => {
     }
 })
 
+//To get the doctors details
+router.get('/doc/getDoctor', auth, async (req, res) => {
+    try {
+        const user = req.decoded.user.id;
+        const doctor = await Doctor.findById(req.decoded.user.id);
+
+        console.log(doctor)
+        if (!doctor) {
+            return res.status(404).send({
+                msg: 'Doctor not found in db'
+            })
+        }
+
+        res.status(200).send(doctor)
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: 'Server Error'
+        })
+    }
+})
+
 
 module.exports = router

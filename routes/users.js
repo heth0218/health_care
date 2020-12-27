@@ -8,6 +8,7 @@ const auth = require('../middleware/auth');
 const Report = require('../models/Report');
 const Doctor = require('../models/Doctor');
 const Prescription = require('../models/Prescription')
+const pusher = require('../config/pusher')
 
 //Register a User
 
@@ -99,6 +100,8 @@ router.post('/qrauth', async (req, res) => {
             })
         }
         console.log(updatedUser);
+        pusher.trigger('user', `${doctors._id}`, updatedUser);
+
         res.status(200).send({ updatedUser })
 
     } catch (error) {
