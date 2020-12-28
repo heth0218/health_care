@@ -24,6 +24,7 @@ app.use('/api/user', require('./routes/users'));
 app.use('/api/doctor', require('./routes/doctor'));
 app.use('/api/report', require('./routes/report'));
 app.use('/api/diary', require('./routes/diary'));
+app.use('/api/spotify', require('./routes/spotify'));
 
 
 app.listen(PORT, () => {
