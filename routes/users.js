@@ -196,6 +196,42 @@ router.get('/:number', async (req, res) => {
     }
 })
 
+router.post('/mihir/userDetails', async (req, res) => {
+    try {
+        const { contact } = req.body;
+        const user = await User.findOne({ contact });
+        console.log(user)
+        if (!user) {
+            return res.status(404).send({
+                msg: 'User not found in the db ....'
+            })
+        }
+        const userReports = await Report.find({ patient: user._id });
+
+        const userPrescriptions = await Prescription.find({ patient: user._id }).populate('doctor');
+
+        if (!userReports && !userPrescriptions) {
+            return res.status(400).send({
+                msg: 'No previous reports and prescriptions available'
+            })
+        }
+
+        const noOfReports = userReports.length
+        const noOfPrescriptions = userPrescriptions.length
+
+
+
+        res.status(201).send({ userPrescriptions, userReports, user, noOfReports, noOfPrescriptions });
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            msg: 'Server Error'
+        })
+    }
+})
+
 //Check the user in db
 router.post('/findUser', async (req, res) => {
     try {
