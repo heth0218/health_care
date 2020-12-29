@@ -25,7 +25,7 @@ app.use('/api/doctor', require('./routes/doctor'));
 app.use('/api/report', require('./routes/report'));
 app.use('/api/diary', require('./routes/diary'));
 app.use('/api/spotify', require('./routes/spotify'));
-
+app.use('/api/pay', require('./routes/pay'))
 
 app.listen(PORT, () => {
     console.log(`Listening to post ${PORT}`)
