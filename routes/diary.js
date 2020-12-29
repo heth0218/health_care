@@ -130,7 +130,7 @@ router.get('/doc/clientDetail', async (req, res) => {
                 $gte: new Date(startDate),//"2020-07-05"
                 $lte: new Date(endDate)//"2020-07-31"
             }
-        })
+        }).populate('user')
         console.log(diaries);
         res.status(200).send(diaries)
     } catch (error) {
