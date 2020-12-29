@@ -15,6 +15,7 @@
     "mongoose": "^5.9.21",
     "nodemon": "^2.0.4",
     "pusher": "^4.0.2",
+    "razorpay": "^2.0.6",
     "twilio": "^3.48.1"
   },
   "devDependencies": {},
