@@ -4,8 +4,8 @@ const Diary = require('../models/Diary');
 const User = require('../models/User');
 const Doctor = require('../models/Doctor')
 
-const accountSid = 'ACd9c13445898ed1dd3eab89f9d4fb99ac';
-const authToken = '1d61c5297575d818f055f6242562855d';
+const accountSid = 'AC0112d15c1764e4d39341fb4e9db8803b';
+const authToken = 'f8cc26a71e1b29a4ae6637fd6bb1c40b';
 const client = require('twilio')(accountSid, authToken);
 
 
@@ -63,8 +63,8 @@ router.post('/close', async (req, res) => {
 async function sms({ name, negative }) {
 
     const message = await client.messages.create({
-        to: '+919820145991',
-        from: '+12057758148',
+        to: '+918850356911',
+        from: '+18174941658',
         body: `Hello, ${name} is having a little dull day as we figure out calculating ${negative}% of negative score.Make ${name}'s day a little better and hope you have one too!`,
         // mediaUrl: 'https://climacons.herokuapp.com/clear.png',
     });
